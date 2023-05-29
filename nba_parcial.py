@@ -1,7 +1,9 @@
 import re
 import json
 
-def parse_json(nombre_archivo:str)->list:
+
+
+def parse_json(nombre_archivo: str) -> list:
     """
     esta funcion recibe la ubicacion del archivo json
     crea un diccionario
@@ -19,7 +21,7 @@ lista_auxiliar = lista_jugadores[:]
 
 
 
-def jugadores_con_posicion(lista_auxiliar:list)->str:
+def jugadores_con_posicion(lista_auxiliar: list) -> str:
     '''
     recibe como parametro la lista auxiliar
     y la convierte en una cadena de
@@ -31,16 +33,17 @@ def jugadores_con_posicion(lista_auxiliar:list)->str:
         posicion = jugador["posicion"]
         lista_jugadores_posicion.append(f"{nombre} - {posicion}")
 
-    
     return '\n'.join(lista_jugadores_posicion)
 
     
 
-
-
-
-    
 def indice_jugadores(lista_auxiliar: list) -> str:
+    '''
+    recibe como parametro la lista auxiliar creada anteriormente
+    crea una cadena de texto con los nombres de los jugadores y sus indices
+    retorna la cadena de los nombres con sus indices
+    
+    '''
     lista_jugadores = []
     for i in range(len(lista_auxiliar)):
         nombre = lista_auxiliar[i]["nombre"]
@@ -48,57 +51,71 @@ def indice_jugadores(lista_auxiliar: list) -> str:
     return '\n'.join(lista_jugadores)
 
 
-#Permitir al usuario seleccionar un jugador por su índice y
-# mostrar sus estadísticas completas, incluyendo temporadas jugadas,
-# puntos totales, promedio de puntos por partido, rebotes totales,
-# promedio de rebotes por partido, asistencias totales, promedio de asistencias por partido,
-# robos totales, bloqueos totales, porcentaje de tiros de campo, porcentaje de tiros libres y
-# porcentaje de tiros triples.
 
-def estadisticas_completas_csv(lista_auxiliar: list, indice_seleccionado: int, nombre_archivo: str):
+def estadisticas_completas(lista_auxiliar: list, indice_seleccionado: int)->str:
+    '''
+    recibe como parametro la lista auxiliar creada anteriormente
+    y un indice seleccionado por el usuario
+    muestra la lista de todos los jugadores con sus indices
+    y retorna el nombre del jugador con sus estadisticas elegido por el usuario
+    '''
     if indice_seleccionado <= 0 or indice_seleccionado > len(lista_auxiliar):
         return "Opcion no valida"
     else:
         jugador = lista_auxiliar[indice_seleccionado - 1]
         nombre = jugador["nombre"]
-        posicion = jugador["posicion"]
-        estadisticas = jugador["estadisticas"]
-        jugador_con_estadisticas = f"{nombre}: {estadisticas}"
-
-    with open(nombre_archivo, "w") as archivo:
-        linea = "{0},{1},{2}\n"
-        linea = linea.format(nombre, posicion, str(estadisticas))
-        archivo.write(linea)
+    
+    estadisticas = jugador["estadisticas"]
+    jugador_con_estadisticas = f"{nombre}: {estadisticas}"
 
     return jugador_con_estadisticas
 
 
 
+def exportar_csv(lista_auxiliar:list, indice_seleccionado:int, nombre_archivo:str)->None:
+    '''
+    recibe como parametro la lista auxiliar creada anteriormente,
+    un indice seleccionado por el usuario y el nombre del archivo csv a crear
+    muestra la lista de todos los jugadores con sus indices
+    el usuario elige un jugador por el indice y crea un archivo
+    csv con la informacion del jugador seleccionado
+    
+    '''
+    with open(nombre_archivo, "w") as archivo:
+        jugador = lista_auxiliar[indice_seleccionado-1]
+        linea = "{0},{1},{2}\n"
+        linea = linea.format(jugador["nombre"], jugador["posicion"], str(jugador["estadisticas"]))
+        archivo.write(linea)
 
 
 
 
-#Permitir al usuario buscar un jugador por su nombre y mostrar sus logros,
-#  como campeonatos de la NBA, participaciones en el All-Star y pertenencia
-#  al Salón de la Fama del Baloncesto, etc.
-
-def mostrar_logros(lista_auxiliar:list):
-    jugador_seleccionado = input("Seleccione un jugador por su nombre: ")
+def mostrar_logros(lista_auxiliar: list, jugador_seleccionado: str) -> str:
+    '''
+    recibe como parametro la lista auxiliar creada anteriormente
+    y el nombre de un jugador seleccionado
+    la funcion compara si el nombre ingresado coincide con algun jugador de la lista
+    y si lo encuentra retorna el jugador con sus logros
+    '''
     for jugador in lista_auxiliar:
-        if re.findall(r"[a-zA-Z ]+", jugador_seleccionado):
-            if jugador["nombre"].lower() == jugador_seleccionado.lower():
-                nombre = jugador["nombre"]
-                logros = jugador["logros"]
-                jugador_con_logros = f"{nombre}: {logros}"
-        else:
-            return "Opcion no valida"
-    return jugador_con_logros
+        if jugador["nombre"].lower() == jugador_seleccionado.lower():
+            nombre = jugador["nombre"]
+            logros = jugador["logros"]
+            jugador_con_logros = f"{nombre}: {logros}"
+            return jugador_con_logros
+    return "Opción no válida, ingrese nombre completo"
 
 
-#Calcular y mostrar el promedio de puntos por partido de todo el equipo
-#  del Dream Team, ordenado por nombre de manera ascendente. 
 
-def calcular_promedio(lista_auxiliar:list):
+
+def calcular_promedio(lista_auxiliar: list) -> str:
+    '''
+    recibe como parametro solamente la lista creada anteriormente
+    la funcion saca el promedio de puntos por partido de todo el equipo,
+    ordena por nombre los jugadores de manera ascendente.
+    y retorna los nombres ordenados y el total del promedio
+
+    '''
     lista_promedios = []
     lista_nombres = []
     
@@ -126,14 +143,19 @@ def calcular_promedio(lista_auxiliar:list):
     return promedio_total 
 
 
-#Permitir al usuario ingresar el nombre de un jugador y mostrar si ese
-#  jugador es miembro del Salón de la Fama del Baloncesto.
 
-def miembro_salon_fama(lista_auxiliar:list):
-    jugador_seleccionado = input("Seleccione un jugador por su nombre: ")
 
+
+def miembro_salon_fama(lista_auxiliar: list, jugador_seleccionado: str) -> str:
+    '''
+    recibe como parametro la lista auxiliar creada anteriormente
+    y el nombre de un jugador seleccionado
+    lo que hace la funcion es comparar si el nombre ingresado coincide con algun
+    nombre de la lista
+    y ver si es miembro del salon de la fama
+    si lo es, retorna un texto afirmandolo
+    '''
     for jugador in lista_auxiliar:
-        if re.findall(r"[a-zA-Z ]+", jugador_seleccionado):
             if jugador["nombre"].lower() == jugador_seleccionado.lower():
                 if "Miembro del Salon de la Fama del Baloncesto" in jugador["logros"]:
                     nombre = jugador["nombre"]
@@ -143,13 +165,21 @@ def miembro_salon_fama(lista_auxiliar:list):
                     nombre = jugador["nombre"]
                     jugador_no_miembro = f"{nombre}: No Es Miembro del Salon de la Fama del Baloncesto"
                     return jugador_no_miembro
-        else:
-            return "Opcion no valida"
+            else:
+                return "Opcion no valida, ingrese nombre completo"
         
     
 
 
-def calcular_y_mostrar(lista_auxiliar:list,opcion:str):
+def calcular_y_mostrar(lista_auxiliar: list,opcion: str) -> str:
+    '''
+    recibe como parametro la lista auxiliar creada anteriormente
+    y una opcion que es una estadistica a elegir.
+    lo que hace la funcion es descubrir el jugador con mayor cantidad en
+    la estadistica elegida
+    y retorna su nombre y su estadistica total
+
+    '''
     lista_aux = []
     nombre_max= ""
     max = 0
@@ -166,15 +196,28 @@ def calcular_y_mostrar(lista_auxiliar:list,opcion:str):
 
     return f"El jugador con mayor cantidad es {nombre_max} con un total de {max}"
 
-def calcular_y_mostrar_promedio(lista_auxiliar:list,opcion:str):
+def calcular_y_mostrar_promedio(lista_auxiliar: list, opcion: str) -> str:
+    '''
+    recibe como parametro la lista auxiliar creada anteriormente
+    y una opcion que es una estadistica a elegir.
+    la funcion saca el promedio de el equipo entero en la estadistica elegida,
+    menos el peor jugador en la estadistica elegida,
+    y retorna el total del promedio sin el peor jugador
+
+    '''
     lista_aux = []
+    lista_aux_nombres = []
     lista_aux_sin_min = []
     
     for jugador in lista_auxiliar:
         estadistica = jugador["estadisticas"][opcion]
+        nombre = jugador["nombre"]
         lista_aux.append(estadistica)
+        lista_aux_nombres.append(nombre)
 
     menor = min(lista_aux)
+
+
     for estadistica in lista_aux:
         if estadistica != menor:
             lista_aux_sin_min.append(estadistica)
@@ -186,10 +229,15 @@ def calcular_y_mostrar_promedio(lista_auxiliar:list,opcion:str):
     return mensaje
 
 
-# 17)Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos
 
 
-def calcular_y_mostrar_mayor_logros(lista_auxiliar:list):
+
+def calcular_y_mostrar_mayor_logros(lista_auxiliar: list) -> str:
+    '''
+    recibe como parametro la lista auxiliar creada anteriormente
+    la funcion busca el jugador con mayor cantidad de logros
+    y retorna el nombre, su total de logros y cuales logros
+    '''
     nombre_max_cantidad_logros = ""
     max_logros = 0
     lista_logros = []
@@ -210,8 +258,16 @@ def calcular_y_mostrar_mayor_logros(lista_auxiliar:list):
 
 
 
-def jugadores_promedio_porcentaje_mayor(lista_auxiliar:list,valor_ingresado,opcion:str):
+def jugadores_promedio_porcentaje_mayor(lista_auxiliar: list, valor_ingresado: float, opcion: str) -> str:
+    '''
+    recibe como parametro la lista auxiliar creada anteriormente, un numero ingresado por
+    el usuario  y una opcion a una estadistica a eleccion.
+    la funcion busca los jugadores con mejor porcentaje al numero ingresado
+    y retorna el nombre de los jugadores con sus porcentajes
+
+    '''
     lista_jugadores_mayor = []
+
     for jugador in lista_auxiliar:
         if jugador["estadisticas"][opcion] > valor_ingresado:
             nombre = jugador["nombre"]
@@ -224,23 +280,22 @@ def jugadores_promedio_porcentaje_mayor(lista_auxiliar:list,valor_ingresado,opci
     return "\n".join(lista_jugadores_mayor)
 
 
-#20) Permitir al usuario ingresar un valor y mostrar los jugadores
-#ordenados por posición en la cancha, que hayan tenido un porcentaje
-#  de tiros de campo superior a ese valor.
-
             
-def jugadores_ordenados_porcentaje_tiros(lista_auxiliar,valor_porcentaje):
-    
-
-    # Filtrar los jugadores con un porcentaje de tiros de campo superior al valor ingresado
+def jugadores_ordenados_porcentaje_tiros(lista_auxiliar: list,valor_porcentaje: float) -> str:
+    '''
+    recibe como parametro la lista auxiliar creada anteriormente y
+    un numero ingresado por el usuario.
+    la funcion busca los jugadores con mejor porcentaje al numero ingresado y los ordena
+    en orden de posicion en la cancha
+    y retorna el nombre de los jugadores con sus posiciones y sus porcentajes ordenados
+    ordenados por sus respectivas posiciones
+    '''
     jugadores_mayor_porcentaje = []
 
     for jugador in lista_auxiliar:
         if jugador["estadisticas"]["porcentaje_tiros_de_campo"] > valor_porcentaje:
             jugadores_mayor_porcentaje.append(jugador)
             
-
-    # Imprimir los jugadores filtrados en orden de posición en la cancha
     posiciones = ["Base", "Escolta", "Alero", "Ala-Pívot", "Pívot"]
 
     for posicion in posiciones:
@@ -249,28 +304,11 @@ def jugadores_ordenados_porcentaje_tiros(lista_auxiliar,valor_porcentaje):
                 print(f"Nombre: {jugador['nombre']}")
                 print(f"Posición: {jugador['posicion']}")
                 print(f"Porcentaje de tiros de campo: {jugador['estadisticas']['porcentaje_tiros_de_campo']}%")
-                print("---------------------")
+                
 
 
 
-
-
-        
-
-     
-
-    
-
-
-
-    
-
-    
-
-#Permitir al usuario buscar un jugador por su nombre y mostrar sus logros, como campeonatos de la NBA, participaciones en el All-Star y pertenencia al Salón de la Fama del Baloncesto, etc.
-#Calcular y mostrar el promedio de puntos por partido de todo el equipo del Dream Team, ordenado por nombre de manera ascendente. 
-
-def opciones_menu(lista_auxiliar):
+def opciones_menu(lista_auxiliar: list) -> str:
     """
     Esta función muestra el menu, le permite al usuario
     ingresar una opcion e imprime por consola
@@ -279,7 +317,7 @@ def opciones_menu(lista_auxiliar):
     
     opcion_elegida_por_usuario = input("\n\n1- Mostrar lista de jugadores del Dream Team\n"
                         "2- Seleccionar un jugador por su indice y mostrar sus estadisticas completas,luego guarda toda la informacion de ese jugador en un archivo CSV\n"
-                        "3- -\n"
+                        "3- Permite exportar los datos del jugador elegido a un archivo csv\n"
                         "4- Selecione un jugador por su nombre y muestra sus logros\n"
                         "5- Promedio de puntos por partido de todo el equipo del Dream Team, ordenado por nombre de manera ascendente\n"
                         "6- Seleccione un jugador por su nombre y muestra si ese jugador es miembro del Salón de la Fama del Baloncesto\n"
@@ -305,21 +343,21 @@ def opciones_menu(lista_auxiliar):
     elif opcion_elegida_por_usuario == "2":
         print(indice_jugadores(lista_auxiliar))
         indice_seleccionado = int(input("Seleccione un jugador por su indice: "))
-        resultado = estadisticas_completas_csv(lista_auxiliar, indice_seleccionado, "jugador_exportad.csv")
-        if resultado == "Opcion no valida":
-            print("Opcion no valida")
-        else:
-            print(f"Jugador seleccionado: {resultado}")
+        print(estadisticas_completas(lista_auxiliar, indice_seleccionado))
     elif opcion_elegida_por_usuario == "3":
-        pass
+        print(indice_jugadores(lista_auxiliar))
+        indice_seleccionado = int(input("Seleccione un jugador por su indice: "))
+        exportar_csv(lista_auxiliar, indice_seleccionado, "jugador.csv")
     elif opcion_elegida_por_usuario == "4":
         print(indice_jugadores(lista_auxiliar))
-        print(mostrar_logros(lista_auxiliar))
+        jugador_seleccionado = input("Seleccione un jugador por su nombre: ")
+        print(mostrar_logros(lista_auxiliar,jugador_seleccionado))
     elif opcion_elegida_por_usuario == "5":
         print(f"El promedio de puntos por partido de todo el equipo del Dream Team es: {calcular_promedio(lista_auxiliar)}")
     elif opcion_elegida_por_usuario == "6":
         print(indice_jugadores(lista_auxiliar))
-        print(miembro_salon_fama(lista_auxiliar))
+        jugador_seleccionado = input("Seleccione un jugador por su nombre: ")
+        print(miembro_salon_fama(lista_auxiliar,jugador_seleccionado))
     elif opcion_elegida_por_usuario == "7":
         print(calcular_y_mostrar(lista_auxiliar,opcion = "rebotes_totales"))
     elif opcion_elegida_por_usuario == "8":
