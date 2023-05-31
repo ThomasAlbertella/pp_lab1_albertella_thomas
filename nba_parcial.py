@@ -1,4 +1,5 @@
 import json
+import re
 
 
 
@@ -63,8 +64,9 @@ def estadisticas_completas(lista_auxiliar: list, indice_seleccionado: int)->str:
     else:
         jugador = lista_auxiliar[indice_seleccionado - 1]
         nombre = jugador["nombre"]
+        estadisticas = jugador["estadisticas"]
     
-    estadisticas = jugador["estadisticas"]
+    
     jugador_con_estadisticas = f"{nombre}: {estadisticas}"
 
     return jugador_con_estadisticas
@@ -83,8 +85,8 @@ def exportar_csv(lista_auxiliar:list, indice_seleccionado:int, nombre_archivo:st
     with open(nombre_archivo, "w") as archivo:
         jugador = lista_auxiliar[indice_seleccionado-1]
         linea = "{0},{1},{2}\n"
-        linea = linea.format(jugador["nombre"], jugador["posicion"], str(jugador["estadisticas"]))
-        archivo.write(linea)
+        linea_escrita = linea.format(jugador["nombre"], jugador["posicion"], str(jugador["estadisticas"]))
+        archivo.write(linea_escrita)
 
 
 
