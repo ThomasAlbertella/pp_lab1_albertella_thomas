@@ -17,10 +17,10 @@ class Level2():
         self.lista_balas_enemigos = lista_balas_enemigos
 
         self.lista_enemigos_nivel_2 = []
-        self.lista_enemigos_nivel_2.append(Enemy(x=0, y=500, frame_rate_ms=40, flipped=True, lista_balas_enemigos=lista_balas_enemigos, vidas=1,one_or_two_flag=True))
-        self.lista_enemigos_nivel_2.append(Enemy(x=0, y=280, frame_rate_ms=40, flipped=True, lista_balas_enemigos=lista_balas_enemigos, vidas=1,one_or_two_flag=True))
-        self.lista_enemigos_nivel_2.append(Enemy(x=691, y=170, frame_rate_ms=40, flipped=False, lista_balas_enemigos=lista_balas_enemigos, vidas=1,one_or_two_flag=True))
-        self.lista_enemigos_nivel_2.append(Enemy(x=775, y=425, frame_rate_ms=40, flipped=False, lista_balas_enemigos=lista_balas_enemigos, vidas=1,one_or_two_flag=True))
+        self.lista_enemigos_nivel_2.append(Enemy(x=0, y=500, frame_rate_ms=40, flipped=True, lista_balas_enemigos=lista_balas_enemigos, vidas=2,one_or_two_flag=True))
+        self.lista_enemigos_nivel_2.append(Enemy(x=0, y=280, frame_rate_ms=40, flipped=True, lista_balas_enemigos=lista_balas_enemigos, vidas=2,one_or_two_flag=True))
+        self.lista_enemigos_nivel_2.append(Enemy(x=691, y=170, frame_rate_ms=40, flipped=False, lista_balas_enemigos=lista_balas_enemigos, vidas=2,one_or_two_flag=True))
+        self.lista_enemigos_nivel_2.append(Enemy(x=775, y=425, frame_rate_ms=40, flipped=False, lista_balas_enemigos=lista_balas_enemigos, vidas=2,one_or_two_flag=True))
 
         self.lista_plataformas_nivel_2 = []
         self.lista_plataformas_nivel_2.append(Platform(680, 450, 40, 40, 1))
