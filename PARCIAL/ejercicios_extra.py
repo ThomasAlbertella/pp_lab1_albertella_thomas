@@ -61,7 +61,7 @@ def mostrar_jugadores_cantidad_allstar(lista_auxiliar):
         nombre = jugador["nombre"]
         for logro in jugador["logros"]:
             match = re.search(r"(\d+) veces All-Star", logro)
-            if re.search(r"(\d+) veces All-Star", logro):
+            if match:
                 veces_allstar = int(match.group(1))
                 if nombre in dic_jugadores_allstar:
                     dic_jugadores_allstar[nombre] += veces_allstar
